@@ -9,16 +9,21 @@
 .theme-light .flex.items-center.bg-gray-100 span {
   color: #1e293b !important;
 }
-.theme-light input,
+.theme-light input {
   background-color: #fff;
   color: #1e293b;
-}
 }
 .theme-light button {
   border-radius: 6px;
   font-weight: 500;
   transition: border 0.2s, background 0.2s;
 }
+.theme-light .add-subtask-btn, .theme-light .bg-blue-500, .theme-light .bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #fff !important;
+}
+.theme-light .add-subtask-btn:hover, .theme-light .bg-blue-500:hover, .theme-light .bg-blue-600:hover {
+  background-color: #1d4ed8 !important;
 }
 .theme-light input[type="time"] {
   background-color: #f3f4f6;
@@ -28,7 +33,6 @@
   border-radius: 6px;
   font-size: 1rem;
   box-shadow: none;
-}
 }
 .theme-light .bg-white {
   background-color: #fff !important;
@@ -56,10 +60,17 @@
 .theme-dark .subtask-input-row span,
 .theme-dark .flex.items-center.bg-gray-100 span {
   color: #e5e7eb !important;
-}
 .theme-dark input,
 .theme-dark textarea,
 .theme-dark button {
+}
+.theme-dark .add-subtask-btn, .theme-dark .bg-blue-500, .theme-dark .bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #fff !important;
+}
+.theme-dark .add-subtask-btn:hover, .theme-dark .bg-blue-500:hover, .theme-dark .bg-blue-600:hover {
+  background-color: #1d4ed8 !important;
+}
   background-color: #1e293b !important;
   color: #e5e7eb;
 }
