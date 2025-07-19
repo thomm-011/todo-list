@@ -1,0 +1,122 @@
+/* =================== TEMA CLARO =================== */
+.theme-light .todo-list-item,
+.theme-light .subtask-input-row,
+.theme-light .flex.items-center.bg-gray-100 {
+  background-color: #f3f4f6;
+  color: #1e293b;
+}
+.theme-light .subtask-input-row span,
+.theme-light .flex.items-center.bg-gray-100 span {
+  color: #1e293b !important;
+}
+.theme-light input,
+.theme-light textarea,
+.theme-light button {
+  background-color: #fff;
+  color: #1e293b;
+  border: 1.5px solid #3b82f6;
+  box-shadow: none;
+}
+.theme-light #todo-form {
+  display: flex;
+  gap: 8px;
+}
+.theme-light #todo-form input {
+  flex: 1;
+}
+.theme-light #todo-form button {
+  min-width: 110px;
+}
+.theme-light .subtask-input-row {
+  gap: 8px;
+}
+.theme-light .subtask-input-row input {
+  flex: 1;
+}
+.theme-light .subtask-input-row button {
+  min-width: 32px;
+}
+}
+.theme-light button {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: border 0.2s, background 0.2s;
+}
+}
+.theme-light input[type="time"] {
+  background-color: #f3f4f6;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: none;
+}
+}
+.theme-light .bg-white {
+  background-color: #fff !important;
+}
+.theme-light .border-blue-300, .theme-light .border-blue-200 {
+  border-color: #3b82f6;
+}
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #64748b;
+}
+
+/* =================== TEMA ESCURO =================== */
+.theme-dark .todo-list-item,
+.theme-dark .subtask-input-row,
+.theme-dark .flex.items-center.bg-gray-100 {
+  background-color: #2d3748 !important;
+  color: #e5e7eb !important;
+}
+.theme-dark .todo-list-item span,
+.theme-dark .todo-list-item .text-gray-800,
+.theme-dark .todo-list-item .text-gray-400 {
+  color: #e5e7eb !important;
+}
+.theme-dark .subtask-input-row span,
+.theme-dark .flex.items-center.bg-gray-100 span {
+  color: #e5e7eb !important;
+}
+.theme-dark input,
+.theme-dark textarea,
+.theme-dark button {
+  background-color: #1e293b !important;
+  color: #e5e7eb;
+}
+.theme-dark input[type="time"] {
+  background-color: #2d3748 !important;
+  color: #e5e7eb;
+  border: 1px solid #4a5568;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: none;
+}
+.theme-dark input[type="checkbox"] {
+  accent-color: #a0aec0 !important;
+}
+.theme-dark .bg-white {
+  background-color: #2d3748 !important;
+}
+.theme-dark .border-blue-300, .theme-dark .border-blue-200 {
+  border-color: #2d3748;
+}
+.theme-dark input::placeholder,
+.theme-dark textarea::placeholder {
+  color: #a0aec0;
+}
+body {
+  transition: background 0.3s;
+}
+body.theme-dark {
+  background: linear-gradient(to bottom right, #1a202c, #2d3748);
+}
+body.theme-dark h1, body.theme-dark .todo-title {
+  color: #fbbf24 !important;
+}
+#app {
+  transition: background 0.3s, border 0.3s;
+}

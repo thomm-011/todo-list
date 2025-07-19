@@ -1,0 +1,430 @@
+<!-- ...existing code... -->
+<!-- Substitui o input de horário por campo de texto e popup customizado -->
+<style>
+  .time-popup {
+    position: absolute;
+    z-index: 100;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 16px;
+    display: none;
+  }
+  .theme-dark .time-popup {
+    background: #2d3748;
+    color: #e5e7eb;
+    border-color: #4a5568;
+  }
+  .time-popup select {
+    font-size: 1.1rem;
+    margin: 0 8px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #f3f4f6;
+    color: #1e293b;
+  }
+  .theme-dark .time-popup select {
+    background: #1e293b;
+    color: #e5e7eb;
+    border-color: #4a5568;
+  }
+  .time-popup button {
+    margin: 0 8px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #2563eb;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .time-popup .cancel-btn {
+    background: #e53e3e;
+  }
+</style>
+<!-- ...existing code... -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List - Microsoft To Do Style</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body id="body" class="bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen flex items-center justify-center transition-colors">
+  <div id="app" class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md transition-colors">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-blue-700 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4 -4" /></svg>
+        Todo List
+      </h1>
+      <button id="theme-toggle" class="ml-2 p-2 rounded-full bg-blue-100 dark:bg-gray-800 hover:bg-blue-200 dark:hover:bg-gray-700 transition-colors">
+        <span id="theme-icon">
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="currentColor" /><path stroke="currentColor" stroke-width="2" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke="currentColor" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        </span>
+      </button>
+    </div>
+    <form id="todo-form" class="grid grid-cols-1 gap-2 mb-4">
+      <div class="flex">
+        <input id="todo-input" type="text" class="flex-1 border border-blue-300 rounded-l-lg px-4 py-2 focus:outline-none" placeholder="Adicionar nova tarefa..." />
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700">Adicionar</button>
+      </div>
+      <div class="flex gap-2">
+        <div class="relative w-1/2">
+          <input id="todo-date" type="text" readonly class="w-full border border-blue-300 rounded-lg px-2 py-1 focus:outline-none cursor-pointer" placeholder="Data" />
+          <div id="calendar-popup" class="absolute z-10 bg-white border border-blue-200 rounded-lg shadow-lg mt-1 p-2 hidden"></div>
+        </div>
+        <div class="relative w-1/2">
+          <input id="todo-time" type="text" readonly class="w-full border border-blue-300 rounded-lg px-2 py-1 focus:outline-none cursor-pointer" placeholder="Horário" />
+          <div id="time-popup" class="absolute z-10 bg-white border border-blue-200 rounded-lg shadow-lg mt-1 p-2 hidden"></div>
+        </div>
+      </div>
+      <input id="todo-notes" type="text" class="border border-blue-300 rounded-lg px-2 py-1 focus:outline-none" placeholder="Observações" />
+      <div id="subtask-section" class="flex flex-col gap-2">
+        <div class="flex gap-2">
+          <input id="subtask-input" type="text" class="flex-1 border border-blue-300 rounded-lg px-2 py-1 focus:outline-none" placeholder="Adicionar subtarefa..." />
+          <button type="button" id="add-subtask" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600">+</button>
+        </div>
+        <ul id="subtask-list" class="ml-6 space-y-1"></ul>
+      </div>
+    </form>
+    <ul id="todo-list" class="space-y-2"></ul>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    // Tema escuro
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.getElementById('body');
+    const app = document.getElementById('app');
+    const iconSun = document.getElementById('icon-sun');
+    const iconMoon = document.getElementById('icon-moon');
+    function setDarkMode(dark) {
+      if (dark) {
+        document.body.classList.add('dark');
+        document.getElementById('app').classList.add('dark');
+        iconSun.classList.add('hidden');
+        iconMoon.classList.remove('hidden');
+        // Adiciona classe dark em inputs, botões, popups
+        document.querySelectorAll('input, textarea, button, #calendar-popup, #time-popup, h1').forEach(el => el.classList.add('dark'));
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        document.getElementById('app').classList.remove('dark');
+        iconSun.classList.remove('hidden');
+        iconMoon.classList.add('hidden');
+        document.querySelectorAll('input, textarea, button, #calendar-popup, #time-popup, h1').forEach(el => el.classList.remove('dark'));
+        localStorage.setItem('theme', 'light');
+      }
+    }
+    themeToggle.onclick = () => {
+      const isDark = body.classList.contains('dark');
+      setDarkMode(!isDark);
+    };
+    // Carregar tema salvo
+    if (localStorage.getItem('theme') === 'dark') {
+      setDarkMode(true);
+    }
+  </script>
+  <script>
+    // Subtarefas dinâmicas
+    const subtaskInput = document.getElementById('subtask-input');
+    const addSubtaskBtn = document.getElementById('add-subtask');
+    const subtaskList = document.getElementById('subtask-list');
+    let subtasks = [];
+
+    function renderSubtasks() {
+      subtaskList.innerHTML = '';
+      subtasks.forEach((sub, idx) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center bg-gray-100 rounded px-2 py-1 text-sm';
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.className = 'form-checkbox h-4 w-4 text-blue-400 mr-2';
+        check.disabled = true;
+        const span = document.createElement('span');
+        span.textContent = sub;
+        span.className = 'flex-1';
+        const delBtn = document.createElement('button');
+        delBtn.textContent = '×';
+        delBtn.className = 'ml-2 text-red-500 hover:text-red-700';
+        delBtn.onclick = () => {
+          subtasks.splice(idx, 1);
+          renderSubtasks();
+        };
+        li.appendChild(check);
+        li.appendChild(span);
+        li.appendChild(delBtn);
+        subtaskList.appendChild(li);
+      });
+    }
+
+    addSubtaskBtn.onclick = () => {
+      const value = subtaskInput.value.trim();
+      if (value) {
+        subtasks.push(value);
+        subtaskInput.value = '';
+        renderSubtasks();
+        subtaskInput.focus();
+      }
+    };
+
+    subtaskInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        addSubtaskBtn.click();
+      }
+    });
+
+    // Limpar subtarefas ao adicionar tarefa
+    window.clearSubtasks = function() {
+      subtasks = [];
+      renderSubtasks();
+    };
+    // Pegar subtarefas ao adicionar tarefa
+    window.getSubtasks = function() {
+      return [...subtasks];
+    };
+  </script>
+  <script>
+    // Calendário simples
+    window.todoDateInput = document.getElementById('todo-date');
+    window.calendarPopup = document.getElementById('calendar-popup');
+    window.selectedDate = '';
+
+    function renderCalendar(month, year) {
+      calendarPopup.innerHTML = '';
+      const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+      const header = document.createElement('div');
+      header.className = 'flex justify-between items-center mb-2';
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '<';
+      prevBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = '>';
+      nextBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
+      const monthYear = document.createElement('span');
+      monthYear.textContent = `${month + 1}/${year}`;
+      monthYear.className = 'font-bold text-blue-700';
+      header.appendChild(prevBtn);
+      header.appendChild(monthYear);
+      header.appendChild(nextBtn);
+      calendarPopup.appendChild(header);
+
+      const table = document.createElement('table');
+      table.className = 'w-full text-center';
+      const thead = document.createElement('thead');
+      const tr = document.createElement('tr');
+      daysOfWeek.forEach(d => {
+        const th = document.createElement('th');
+        th.textContent = d;
+        th.className = 'text-xs text-blue-600 py-1';
+        tr.appendChild(th);
+      });
+      thead.appendChild(tr);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      let day = 1;
+      for (let i = 0; i < 6; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+          const cell = document.createElement('td');
+          cell.className = 'py-1 px-2 cursor-pointer hover:bg-blue-100 rounded';
+          if (i === 0 && j < firstDay) {
+            cell.textContent = '';
+          } else if (day > daysInMonth) {
+            cell.textContent = '';
+          } else {
+            cell.textContent = day;
+            cell.addEventListener('click', () => {
+              selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+              dateInput.value = selectedDate;
+              calendarPopup.classList.add('hidden');
+            });
+            if (selectedDate === `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`) {
+              cell.classList.add('bg-blue-200');
+            }
+            day++;
+          }
+          row.appendChild(cell);
+        }
+        tbody.appendChild(row);
+      }
+      table.appendChild(tbody);
+      calendarPopup.appendChild(table);
+
+      prevBtn.onclick = () => {
+        let m = month - 1;
+        let y = year;
+        if (m < 0) { m = 11; y--; }
+        renderCalendar(m, y);
+      };
+      nextBtn.onclick = () => {
+        let m = month + 1;
+        let y = year;
+        if (m > 11) { m = 0; y++; }
+        renderCalendar(m, y);
+      };
+    }
+
+    window.todoDateInput.addEventListener('focus', () => {
+      const today = window.todoDateInput.value ? new Date(window.todoDateInput.value) : new Date();
+      renderCalendar(today.getMonth(), today.getFullYear());
+      window.calendarPopup.classList.remove('hidden');
+    });
+    window.todoDateInput.addEventListener('blur', () => {
+      setTimeout(() => window.calendarPopup.classList.add('hidden'), 200);
+    });
+
+    // Seletor de horário
+    window.timeInput = document.getElementById('todo-time');
+    window.timePopup = document.getElementById('time-popup');
+    window.selectedTime = '';
+
+    function renderTimeSelector() {
+      timePopup.innerHTML = '';
+      const hoursRow = document.createElement('div');
+      hoursRow.className = 'flex flex-wrap gap-1 mb-2';
+      for (let h = 0; h < 24; h++) {
+        const hourBtn = document.createElement('button');
+        hourBtn.textContent = String(h).padStart(2, '0');
+        hourBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
+        hourBtn.onclick = () => {
+          renderMinuteSelector(h);
+        };
+        hoursRow.appendChild(hourBtn);
+      }
+      timePopup.appendChild(hoursRow);
+    }
+
+    function renderMinuteSelector(hour) {
+      timePopup.innerHTML = '';
+      const minutesRow = document.createElement('div');
+      minutesRow.className = 'flex flex-wrap gap-1 mb-2';
+      for (let m = 0; m < 60; m += 5) {
+        const minBtn = document.createElement('button');
+        minBtn.textContent = `${String(hour).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        minBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
+        minBtn.onclick = () => {
+          selectedTime = minBtn.textContent;
+          timeInput.value = selectedTime;
+          timePopup.classList.add('hidden');
+        };
+        minutesRow.appendChild(minBtn);
+      }
+      timePopup.appendChild(minutesRow);
+      const backBtn = document.createElement('button');
+      backBtn.textContent = 'Voltar';
+      backBtn.className = 'px-2 py-1 text-gray-600 hover:bg-gray-100 rounded';
+      backBtn.onclick = () => renderTimeSelector();
+      timePopup.appendChild(backBtn);
+    }
+
+    window.timeInput.addEventListener('focus', () => {
+      renderTimeSelector();
+      window.timePopup.classList.remove('hidden');
+    });
+    window.timeInput.addEventListener('blur', () => {
+      setTimeout(() => window.timePopup.classList.add('hidden'), 200);
+    });
+  </script>
+  <script>
+    // Calendário simples
+    const dateInput = document.getElementById('todo-date');
+    const calendarPopup = document.getElementById('calendar-popup');
+    let selectedDate = '';
+
+    function renderCalendar(month, year) {
+      calendarPopup.innerHTML = '';
+      const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+      const header = document.createElement('div');
+      header.className = 'flex justify-between items-center mb-2';
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '<';
+      prevBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = '>';
+      nextBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
+      const monthYear = document.createElement('span');
+      monthYear.textContent = `${month + 1}/${year}`;
+      monthYear.className = 'font-bold text-blue-700';
+      header.appendChild(prevBtn);
+      header.appendChild(monthYear);
+      header.appendChild(nextBtn);
+      calendarPopup.appendChild(header);
+
+      const table = document.createElement('table');
+      table.className = 'w-full text-center';
+      const thead = document.createElement('thead');
+      const tr = document.createElement('tr');
+      daysOfWeek.forEach(d => {
+        const th = document.createElement('th');
+        th.textContent = d;
+        th.className = 'text-xs text-blue-600 py-1';
+        tr.appendChild(th);
+      });
+      thead.appendChild(tr);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      let day = 1;
+      for (let i = 0; i < 6; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+          const cell = document.createElement('td');
+          cell.className = 'py-1 px-2 cursor-pointer hover:bg-blue-100 rounded';
+          if (i === 0 && j < firstDay) {
+            cell.textContent = '';
+          } else if (day > daysInMonth) {
+            cell.textContent = '';
+          } else {
+            cell.textContent = day;
+            cell.addEventListener('click', () => {
+              selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+              dateInput.value = selectedDate;
+              calendarPopup.classList.add('hidden');
+            });
+            if (selectedDate === `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`) {
+              cell.classList.add('bg-blue-200');
+            }
+            day++;
+          }
+          row.appendChild(cell);
+        }
+        tbody.appendChild(row);
+      }
+      table.appendChild(tbody);
+      calendarPopup.appendChild(table);
+
+      prevBtn.onclick = () => {
+        let m = month - 1;
+        let y = year;
+        if (m < 0) { m = 11; y--; }
+        renderCalendar(m, y);
+      };
+      nextBtn.onclick = () => {
+        let m = month + 1;
+        let y = year;
+        if (m > 11) { m = 0; y++; }
+        renderCalendar(m, y);
+      };
+    }
+
+    dateInput.addEventListener('focus', () => {
+      const today = dateInput.value ? new Date(dateInput.value) : new Date();
+      renderCalendar(today.getMonth(), today.getFullYear());
+      calendarPopup.classList.remove('hidden');
+    });
+    dateInput.addEventListener('blur', () => {
+      setTimeout(() => calendarPopup.classList.add('hidden'), 200);
+    });
+  </script>
+</body>
+</html>
