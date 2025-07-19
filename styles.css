@@ -10,31 +10,8 @@
   color: #1e293b !important;
 }
 .theme-light input,
-.theme-light textarea,
-.theme-light button {
   background-color: #fff;
   color: #1e293b;
-  border: 1.5px solid #3b82f6;
-  box-shadow: none;
-}
-.theme-light #todo-form {
-  display: flex;
-  gap: 8px;
-}
-.theme-light #todo-form input {
-  flex: 1;
-}
-.theme-light #todo-form button {
-  min-width: 110px;
-}
-.theme-light .subtask-input-row {
-  gap: 8px;
-}
-.theme-light .subtask-input-row input {
-  flex: 1;
-}
-.theme-light .subtask-input-row button {
-  min-width: 32px;
 }
 }
 .theme-light button {
