@@ -220,16 +220,61 @@ form.addEventListener('submit', (e) => {
 
 // Carregar tarefas ao iniciar
 window.addEventListener('DOMContentLoaded', renderTodos);
-// Corrige campo de data para exibir e salvar no formato brasileiro
-const dateInput = document.getElementById('todo-date');
-const calendarPopup = document.getElementById('calendar-popup');
+// --- NOVA LÓGICA PARA POPUP UNIFICADO DE DATA/HORA ---
+const reminderBtn = document.getElementById('reminder-btn');
+const reminderPopup = document.getElementById('reminder-popup');
 let selectedDate = '';
+let selectedTime = '';
 
-function renderCalendar(month, year) {
-  calendarPopup.innerHTML = '';
-  const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+function renderUnifiedPopup() {
+  reminderPopup.innerHTML = '';
+  // Cabeçalho
   const header = document.createElement('div');
   header.className = 'flex justify-between items-center mb-2';
+  header.innerHTML = '<span class="font-bold text-blue-700">Selecione data e horário</span>';
+  reminderPopup.appendChild(header);
+
+  // Calendário
+  const calendarDiv = document.createElement('div');
+  calendarDiv.className = 'mb-2';
+  renderCalendarUnified(calendarDiv);
+  reminderPopup.appendChild(calendarDiv);
+
+  // Horário
+  const timeDiv = document.createElement('div');
+  timeDiv.className = 'mb-2';
+  renderTimeSelectorUnified(timeDiv);
+  reminderPopup.appendChild(timeDiv);
+
+  // Botão salvar
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = 'Salvar';
+  saveBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full';
+  saveBtn.onclick = () => {
+    // Preenche campos ocultos para o submit
+    document.getElementById('hidden-date').value = selectedDate;
+    document.getElementById('hidden-time').value = selectedTime;
+    reminderPopup.classList.add('hidden');
+    reminderBtn.textContent = (selectedDate || selectedTime) ? `Lembrar-me: ${selectedDate}${selectedDate && selectedTime ? ' ' : ''}${selectedTime}` : 'Lembrar-me';
+  };
+  reminderPopup.appendChild(saveBtn);
+}
+
+function renderCalendarUnified(container) {
+  container.innerHTML = '';
+  const today = new Date();
+  let month = today.getMonth();
+  let year = today.getFullYear();
+  if (selectedDate) {
+    const parts = selectedDate.split('/');
+    if (parts.length === 3) {
+      month = parseInt(parts[1], 10) - 1;
+      year = parseInt(parts[2], 10);
+    }
+  }
+  const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const header = document.createElement('div');
+  header.className = 'flex justify-between items-center mb-1';
   const prevBtn = document.createElement('button');
   prevBtn.textContent = '<';
   prevBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
@@ -242,7 +287,7 @@ function renderCalendar(month, year) {
   header.appendChild(prevBtn);
   header.appendChild(monthYear);
   header.appendChild(nextBtn);
-  calendarPopup.appendChild(header);
+  container.appendChild(header);
 
   const table = document.createElement('table');
   table.className = 'w-full text-center';
@@ -274,8 +319,7 @@ function renderCalendar(month, year) {
         cell.textContent = day;
         cell.addEventListener('click', () => {
           selectedDate = `${day.toString().padStart(2, '0')}/${(month + 1).toString().padStart(2, '0')}/${year}`;
-          dateInput.value = selectedDate;
-          calendarPopup.classList.add('hidden');
+          renderUnifiedPopup();
         });
         if (selectedDate === `${day.toString().padStart(2, '0')}/${(month + 1).toString().padStart(2, '0')}/${year}`) {
           cell.classList.add('bg-blue-200');
@@ -287,38 +331,26 @@ function renderCalendar(month, year) {
     tbody.appendChild(row);
   }
   table.appendChild(tbody);
-  calendarPopup.appendChild(table);
+  container.appendChild(table);
 
   prevBtn.onclick = () => {
     let m = month - 1;
     let y = year;
     if (m < 0) { m = 11; y--; }
-    renderCalendar(m, y);
+    month = m; year = y;
+    renderCalendarUnified(container);
   };
   nextBtn.onclick = () => {
     let m = month + 1;
     let y = year;
     if (m > 11) { m = 0; y++; }
-    renderCalendar(m, y);
+    month = m; year = y;
+    renderCalendarUnified(container);
   };
 }
 
-dateInput.addEventListener('focus', () => {
-  const today = selectedDate ? new Date(selectedDate.split('/').reverse().join('-')) : new Date();
-  renderCalendar(today.getMonth(), today.getFullYear());
-  calendarPopup.classList.remove('hidden');
-});
-dateInput.addEventListener('blur', () => {
-  setTimeout(() => calendarPopup.classList.add('hidden'), 200);
-});
-
-// Corrige campo de hora para popup customizado
-const timeInput = document.getElementById('todo-time');
-const timePopup = document.getElementById('time-popup');
-let selectedTime = '';
-
-function renderTimeSelector() {
-  timePopup.innerHTML = '';
+function renderTimeSelectorUnified(container) {
+  container.innerHTML = '';
   const hoursRow = document.createElement('div');
   hoursRow.className = 'flex flex-wrap gap-1 mb-2';
   for (let h = 0; h < 24; h++) {
@@ -326,15 +358,15 @@ function renderTimeSelector() {
     hourBtn.textContent = String(h).padStart(2, '0');
     hourBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
     hourBtn.onclick = () => {
-      renderMinuteSelector(h);
+      renderMinuteSelectorUnified(container, h);
     };
     hoursRow.appendChild(hourBtn);
   }
-  timePopup.appendChild(hoursRow);
+  container.appendChild(hoursRow);
 }
 
-function renderMinuteSelector(hour) {
-  timePopup.innerHTML = '';
+function renderMinuteSelectorUnified(container, hour) {
+  container.innerHTML = '';
   const minutesRow = document.createElement('div');
   minutesRow.className = 'flex flex-wrap gap-1 mb-2';
   for (let m = 0; m < 60; m += 5) {
@@ -343,25 +375,28 @@ function renderMinuteSelector(hour) {
     minBtn.className = 'px-2 py-1 text-blue-600 hover:bg-blue-100 rounded';
     minBtn.onclick = () => {
       selectedTime = minBtn.textContent;
-      timeInput.value = selectedTime;
-      timePopup.classList.add('hidden');
+      renderUnifiedPopup();
     };
     minutesRow.appendChild(minBtn);
   }
-  timePopup.appendChild(minutesRow);
+  container.appendChild(minutesRow);
   const backBtn = document.createElement('button');
   backBtn.textContent = 'Voltar';
   backBtn.className = 'px-2 py-1 text-gray-600 hover:bg-gray-100 rounded';
-  backBtn.onclick = () => renderTimeSelector();
-  timePopup.appendChild(backBtn);
+  backBtn.onclick = () => renderTimeSelectorUnified(container);
+  container.appendChild(backBtn);
 }
 
-timeInput.addEventListener('focus', () => {
-  renderTimeSelector();
-  timePopup.classList.remove('hidden');
+reminderBtn.addEventListener('click', () => {
+  reminderPopup.classList.remove('hidden');
+  renderUnifiedPopup();
 });
-timeInput.addEventListener('blur', () => {
-  setTimeout(() => timePopup.classList.add('hidden'), 200);
+
+// Fecha popup ao clicar fora
+document.addEventListener('mousedown', (e) => {
+  if (!reminderPopup.contains(e.target) && e.target !== reminderBtn) {
+    reminderPopup.classList.add('hidden');
+  }
 });
 // Troca de tema: garante que o body recebe theme-dark ou theme-light
 function applyTheme() {
