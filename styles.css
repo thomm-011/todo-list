@@ -1,110 +1,337 @@
-/* =================== TEMA CLARO =================== */
-.theme-light .todo-list-item,
-.theme-light .subtask-input-row,
-.theme-light .flex.items-center.bg-gray-100 {
-  background-color: #f3f4f6;
+/* =================== TRANSIÇÕES GLOBAIS =================== */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* =================== TEMA CLARO (PADRÃO) =================== */
+body {
+  background: linear-gradient(to bottom right, #dbeafe, #bfdbfe);
+}
+
+#app {
+  background-color: #ffffff;
   color: #1e293b;
 }
-.theme-light .subtask-input-row span,
-.theme-light .flex.items-center.bg-gray-100 span {
-  color: #1e293b !important;
-}
-.theme-light input {
-  background-color: #fff;
+
+/* Inputs e formulários */
+input, textarea, select {
+  background-color: #ffffff;
   color: #1e293b;
-}
-.theme-light button {
-  border-radius: 6px;
-  font-weight: 500;
-  transition: border 0.2s, background 0.2s;
-}
-.theme-light .add-subtask-btn, .theme-light .bg-blue-500, .theme-light .bg-blue-600 {
-  background-color: #2563eb !important;
-  color: #fff !important;
-}
-.theme-light .add-subtask-btn:hover, .theme-light .bg-blue-500:hover, .theme-light .bg-blue-600:hover {
-  background-color: #1d4ed8 !important;
-}
-.theme-light input[type="time"] {
-  background-color: #f3f4f6;
-  color: #1e293b;
-  border: 1px solid #cbd5e1;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 1rem;
-  box-shadow: none;
-}
-.theme-light .bg-white {
-  background-color: #fff !important;
-}
-.theme-light .border-blue-300, .theme-light .border-blue-200 {
   border-color: #3b82f6;
 }
-.theme-light input::placeholder,
-.theme-light textarea::placeholder {
+
+input::placeholder, textarea::placeholder {
   color: #64748b;
 }
 
-/* =================== TEMA ESCURO =================== */
-.theme-dark .todo-list-item,
-.theme-dark .subtask-input-row,
-.theme-dark .flex.items-center.bg-gray-100 {
-  background-color: #2d3748 !important;
-  color: #e5e7eb !important;
+/* Botões */
+button {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
-.theme-dark .todo-list-item span,
-.theme-dark .todo-list-item .text-gray-800,
-.theme-dark .todo-list-item .text-gray-400 {
-  color: #e5e7eb !important;
-}
-.theme-dark .subtask-input-row span,
-.theme-dark .flex.items-center.bg-gray-100 span {
-  color: #e5e7eb !important;
-.theme-dark input,
-.theme-dark textarea,
-.theme-dark button {
-}
-.theme-dark .add-subtask-btn, .theme-dark .bg-blue-500, .theme-dark .bg-blue-600 {
+
+.bg-blue-500, .bg-blue-600 {
   background-color: #2563eb !important;
-  color: #fff !important;
+  color: #ffffff !important;
 }
-.theme-dark .add-subtask-btn:hover, .theme-dark .bg-blue-500:hover, .theme-dark .bg-blue-600:hover {
+
+.bg-blue-500:hover, .bg-blue-600:hover {
   background-color: #1d4ed8 !important;
 }
-  background-color: #1e293b !important;
-  color: #e5e7eb;
+
+/* Itens da lista */
+.todo-list-item {
+  background-color: #f8fafc;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
 }
-.theme-dark input[type="time"] {
-  background-color: #2d3748 !important;
-  color: #e5e7eb;
-  border: 1px solid #4a5568;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 1rem;
-  box-shadow: none;
+
+.todo-list-item span {
+  color: #1e293b;
 }
-.theme-dark input[type="checkbox"] {
-  accent-color: #a0aec0 !important;
+
+/* Subtarefas */
+.subtask-item, .bg-gray-100 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2px;
 }
-.theme-dark .bg-white {
-  background-color: #2d3748 !important;
+
+.subtask-item span, .bg-gray-100 span {
+  color: #1e293b !important;
 }
-.theme-dark .border-blue-300, .theme-dark .border-blue-200 {
-  border-color: #2d3748;
+
+/* Campo de adicionar subtarefa */
+.subtask-item input[type="text"] {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  font-size: 0.875rem;
 }
-.theme-dark input::placeholder,
-.theme-dark textarea::placeholder {
-  color: #a0aec0;
+
+.subtask-item input[type="text"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
-body {
-  transition: background 0.3s;
+
+/* Botão de adicionar subtarefa */
+.subtask-item button {
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+/* Botão de deletar subtarefa */
+.delete-subtask-btn {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.delete-subtask-btn:hover {
+  opacity: 1;
+}
+
+/* Container de subtarefas */
+.subtask-container {
+  border-left: 2px solid #e2e8f0;
+  padding-left: 12px;
+  margin-left: 8px;
+}
+
+/* Popups */
+.time-popup, #reminder-popup {
+  background-color: #ffffff;
+  color: #1e293b;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#reminder-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* Calendário dentro do popup */
+#reminder-calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#reminder-calendar td {
+  width: 14.28%;
+  text-align: center;
+  padding: 8px 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#reminder-calendar td:hover {
+  background-color: #dbeafe;
+}
+
+#reminder-calendar td.selected {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+/* Seletor de tempo */
+#reminder-time select {
+  min-width: 60px;
+}
+
+/* Botões do popup */
+#reminder-popup button {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+#clear-reminder {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#clear-reminder:hover {
+  background-color: #fee2e2;
+}
+
+/* Títulos */
+h1, .todo-title {
+  color: #1d4ed8 !important;
+}
+
+/* =================== TEMA ESCURO =================== */
 body.theme-dark {
   background: linear-gradient(to bottom right, #1a202c, #2d3748);
 }
-body.theme-dark h1, body.theme-dark .todo-title {
+
+body.theme-dark #app {
+  background-color: #2d3748 !important;
+  color: #e5e7eb !important;
+}
+
+/* Inputs e formulários no tema escuro */
+body.theme-dark input, 
+body.theme-dark textarea, 
+body.theme-dark select {
+  background-color: #1e293b !important;
+  color: #e5e7eb !important;
+  border-color: #4a5568 !important;
+}
+
+body.theme-dark input::placeholder, 
+body.theme-dark textarea::placeholder {
+  color: #a0aec0 !important;
+}
+
+/* Botões no tema escuro */
+body.theme-dark .bg-blue-500, 
+body.theme-dark .bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+body.theme-dark .bg-blue-500:hover, 
+body.theme-dark .bg-blue-600:hover {
+  background-color: #1d4ed8 !important;
+}
+
+/* Itens da lista no tema escuro */
+body.theme-dark .todo-list-item {
+  background-color: #374151 !important;
+  color: #e5e7eb !important;
+  border-color: #4a5568 !important;
+}
+
+body.theme-dark .todo-list-item span,
+body.theme-dark .todo-list-item .text-gray-800,
+body.theme-dark .todo-list-item .text-gray-400 {
+  color: #e5e7eb !important;
+}
+
+/* Subtarefas no tema escuro */
+body.theme-dark .subtask-item,
+body.theme-dark .bg-gray-100 {
+  background-color: #4a5568 !important;
+  color: #e5e7eb !important;
+  border-color: #2d3748 !important;
+}
+
+body.theme-dark .subtask-item span,
+body.theme-dark .bg-gray-100 span {
+  color: #e5e7eb !important;
+}
+
+/* Campo de adicionar subtarefa no tema escuro */
+body.theme-dark .subtask-item input[type="text"] {
+  background-color: #2d3748 !important;
+  color: #e5e7eb !important;
+  border-color: #4a5568 !important;
+}
+
+body.theme-dark .subtask-item input[type="text"]:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.1) !important;
+}
+
+body.theme-dark .subtask-item input[type="text"]::placeholder {
+  color: #a0aec0 !important;
+}
+
+/* Container de subtarefas no tema escuro */
+body.theme-dark .subtask-container {
+  border-left-color: #4a5568 !important;
+}
+
+/* Botão de deletar subtarefa no tema escuro */
+body.theme-dark .delete-subtask-btn {
+  color: #f87171 !important;
+}
+
+body.theme-dark .delete-subtask-btn:hover {
+  color: #ef4444 !important;
+}
+
+/* Popups no tema escuro */
+body.theme-dark .time-popup,
+body.theme-dark #reminder-popup {
+  background-color: #2d3748 !important;
+  color: #e5e7eb !important;
+  border-color: #4a5568 !important;
+}
+
+body.theme-dark .time-popup select {
+  background-color: #1e293b !important;
+  color: #e5e7eb !important;
+  border-color: #4a5568 !important;
+}
+
+/* Calendário no tema escuro */
+body.theme-dark #reminder-calendar td:hover {
+  background-color: #374151 !important;
+}
+
+body.theme-dark #reminder-calendar td.selected {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+/* Botão limpar no tema escuro */
+body.theme-dark #clear-reminder:hover {
+  background-color: #7f1d1d !important;
+  color: #fecaca !important;
+}
+
+/* Títulos no tema escuro */
+body.theme-dark h1,
+body.theme-dark .todo-title {
   color: #fbbf24 !important;
 }
-#app {
-  transition: background 0.3s, border 0.3s;
+
+/* Checkboxes */
+body.theme-dark input[type="checkbox"] {
+  accent-color: #60a5fa !important;
+}
+
+/* Calendário e seletores de tempo */
+body.theme-dark .hover\:bg-blue-100:hover {
+  background-color: #374151 !important;
+}
+
+body.theme-dark .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+body.theme-dark .text-blue-700 {
+  color: #fbbf24 !important;
+}
+
+/* Estados de hover para botões no tema escuro */
+body.theme-dark button:hover {
+  opacity: 0.9;
+}
+
+/* Bordas e separadores */
+body.theme-dark .border-blue-300,
+body.theme-dark .border-blue-200 {
+  border-color: #4a5568 !important;
+}
+
+/* Text colors específicos */
+body.theme-dark .text-gray-500 {
+  color: #a0aec0 !important;
+}
+
+body.theme-dark .text-xs {
+  color: #cbd5e0 !important;
 }
