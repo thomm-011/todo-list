@@ -124,7 +124,7 @@ function renderSubtasks() {
     checkbox.disabled = true;
     
     const span = document.createElement('span');
-    span.textContent = sub;
+    span.textContent = typeof sub === 'string' ? sub : sub.text;
     span.className = 'flex-1';
     
     const deleteBtn = document.createElement('button');
@@ -593,10 +593,10 @@ function createTodoItem(todo, idx) {
       const subCheckbox = document.createElement('input');
       subCheckbox.type = 'checkbox';
       subCheckbox.className = 'form-checkbox h-4 w-4 text-blue-400 mr-2';
-      subCheckbox.checked = Array.isArray(todo.subtasksDone) ? todo.subtasksDone[subIdx] : false;
+      subCheckbox.checked = sub.completed || false;
       
       const subSpan = document.createElement('span');
-      subSpan.textContent = sub;
+      subSpan.textContent = sub.text;
       subSpan.className = 'flex-1';
       
       // Botão para deletar subtarefa
@@ -611,10 +611,7 @@ function createTodoItem(todo, idx) {
       
       subCheckbox.addEventListener('change', () => {
         const todos = loadTodos();
-        if (!Array.isArray(todos[idx].subtasksDone)) {
-          todos[idx].subtasksDone = [];
-        }
-        todos[idx].subtasksDone[subIdx] = subCheckbox.checked;
+        todos[idx].subtasks[subIdx].completed = subCheckbox.checked;
         saveTodos(todos);
         
         subSpan.classList.toggle('line-through');
@@ -630,9 +627,6 @@ function createTodoItem(todo, idx) {
       deleteSubBtn.addEventListener('click', () => {
         const todos = loadTodos();
         todos[idx].subtasks.splice(subIdx, 1);
-        if (todos[idx].subtasksDone) {
-          todos[idx].subtasksDone.splice(subIdx, 1);
-        }
         saveTodos(todos);
         renderTodos();
       });
@@ -668,12 +662,12 @@ function createTodoItem(todo, idx) {
       if (!todos[idx].subtasks) {
         todos[idx].subtasks = [];
       }
-      if (!todos[idx].subtasksDone) {
-        todos[idx].subtasksDone = [];
-      }
       
-      todos[idx].subtasks.push(value);
-      todos[idx].subtasksDone.push(false);
+      todos[idx].subtasks.push({
+        id: Date.now(),
+        text: value,
+        completed: false
+      });
       saveTodos(todos);
       
       addSubtaskInput.value = '';
@@ -718,9 +712,12 @@ function addTodo() {
     date: hiddenDate.value,
     time: hiddenTime.value,
     notes: notesInput.value.trim(),
-    subtasks: [...subtasks],
-    done: false,
-    subtasksDone: []
+    subtasks: subtasks.map((sub, index) => ({
+      id: Date.now() + index,
+      text: typeof sub === 'string' ? sub : sub.text,
+      completed: false
+    })),
+    completed: false
   };
 
   const todos = loadTodos();
