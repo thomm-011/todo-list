@@ -26,7 +26,60 @@ function saveTodos(todos) {
 }
 
 function loadTodos() {
-  return JSON.parse(localStorage.getItem(TODOS_KEY) || '[]');
+  const saved = localStorage.getItem(TODOS_KEY);
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  
+  // Dados de exemplo para demonstração
+  const exampleTodos = [
+    {
+      id: Date.now() + 1,
+      text: 'Desenvolver landing page para cliente',
+      completed: false,
+      notes: 'Cliente: TechCorp | Prazo: 15 dias | Orçamento: R$ 2.500\n\nRequisitos:\n- Design moderno e responsivo\n- Formulário de contato\n- Integração com redes sociais\n- SEO otimizado',
+      subtasks: [
+        { id: 1, text: 'Reunião com cliente para briefing', completed: true },
+        { id: 2, text: 'Criar wireframes e mockups', completed: true },
+        { id: 3, text: 'Desenvolver HTML/CSS responsivo', completed: false },
+        { id: 4, text: 'Implementar JavaScript interativo', completed: false },
+        { id: 5, text: 'Testes em diferentes navegadores', completed: false },
+        { id: 6, text: 'Deploy e entrega final', completed: false }
+      ],
+      reminder: {
+        date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Amanhã
+        time: '09:00'
+      }
+    },
+    {
+      id: Date.now() + 2,
+      text: 'Estudar novas tecnologias',
+      completed: false,
+      notes: 'Manter-se atualizado com as últimas tendências em desenvolvimento web',
+      subtasks: [
+        { id: 1, text: 'Ler documentação do React 18', completed: true },
+        { id: 2, text: 'Fazer curso de TypeScript', completed: false },
+        { id: 3, text: 'Praticar com Next.js', completed: false }
+      ],
+      reminder: null
+    },
+    {
+      id: Date.now() + 3,
+      text: 'Organizar workspace',
+      completed: true,
+      notes: 'Manter ambiente de trabalho organizado aumenta a produtividade',
+      subtasks: [
+        { id: 1, text: 'Limpar mesa de trabalho', completed: true },
+        { id: 2, text: 'Organizar cabos', completed: true },
+        { id: 3, text: 'Atualizar bookmarks do navegador', completed: true }
+      ],
+      reminder: null
+    }
+  ];
+  
+  // Salva os exemplos no localStorage para persistência
+  saveTodos(exampleTodos);
+  return exampleTodos;
 }
 
 // =================== GERENCIAMENTO DE TEMA ===================
@@ -702,6 +755,15 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
   addTodo();
 });
+
+// =================== FUNÇÃO PARA DADOS DE EXEMPLO ===================
+function resetToExampleData() {
+  localStorage.removeItem(TODOS_KEY);
+  location.reload();
+}
+
+// Adicionar comando de console para resetar dados
+console.log('💡 Dica: Digite resetToExampleData() no console para ver os dados de exemplo novamente!');
 
 // =================== INICIALIZAÇÃO ===================
 document.addEventListener('DOMContentLoaded', () => {

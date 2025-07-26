@@ -80,6 +80,51 @@ todo-list/
 - Ideal para uso noturno
 - Transições suaves entre temas
 
+## 🎯 Exemplo Prático de Uso
+
+### 📋 Cenário: Planejando um Projeto Web
+
+**Tarefa Principal:** "Desenvolver landing page para cliente"
+
+**Como usar todas as funcionalidades:**
+
+1. **➕ Criar a tarefa:**
+   - Digite: "Desenvolver landing page para cliente"
+   - Adicione notas: "Cliente: TechCorp | Prazo: 15 dias | Orçamento: R$ 2.500"
+
+2. **📋 Adicionar subtarefas:**
+   - "Reunião com cliente para briefing"
+   - "Criar wireframes e mockups"
+   - "Desenvolver HTML/CSS responsivo"
+   - "Implementar JavaScript interativo"
+   - "Testes em diferentes navegadores"
+   - "Deploy e entrega final"
+
+3. **🔔 Configurar lembrete:**
+   - Data: Amanhã
+   - Hora: 09:00
+   - Para não esquecer da reunião inicial
+
+4. **🌙 Alternar tema:**
+   - Use tema claro durante o dia
+   - Mude para tema escuro à noite
+
+5. **✅ Marcar progresso:**
+   - Complete subtarefas conforme avança
+   - Ouça o som de conclusão a cada etapa
+   - Veja o progresso visual da tarefa principal
+
+6. **✏️ Editar conforme necessário:**
+   - Atualize notas com feedback do cliente
+   - Adicione novas subtarefas se surgirem
+   - Ajuste lembretes conforme cronograma
+
+### 🎵 Experiência Completa:
+- **Som**: Feedback auditivo ao completar cada subtarefa
+- **Visual**: Progresso em tempo real
+- **Persistência**: Dados salvos automaticamente
+- **Responsivo**: Acesse de qualquer dispositivo
+
 ## 💡 Funcionalidades Detalhadas
 
 ### ➕ Adicionar Tarefas
